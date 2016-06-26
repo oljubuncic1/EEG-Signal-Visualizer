@@ -13,17 +13,29 @@ def signalParser(electrodeIndex):
     time = []
     eegValue = []
 
+    # eeg value = csv value - avg(all_values)
+
+    sum = 0.
+
     with open('EEGSignal.csv', 'rb') as signalFile:
         signalReader = csv.reader(signalFile)
         for row in signalReader:
             time.append(val)
             val += interval
-            eegValue.append(row[electrodeIndex])
+            eegValue.append(float(row[electrodeIndex]))
+            sum += float(row[electrodeIndex])
+
+    avg = sum / 14980.
+
+    if(electrodeIndex != 14):
+        for i in range(0, 14980):
+            eegValue[i] -= avg
 
     return time, eegValue
 
 
 #main
+
 
 #x,y = signalParser(4)
 #plt.plot(x,y)
